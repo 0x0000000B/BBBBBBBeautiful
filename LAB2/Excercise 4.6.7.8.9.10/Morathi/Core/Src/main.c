@@ -19,11 +19,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "software_timer.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include "FreeRTOS.h"
-//#include "task.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -154,16 +154,29 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim1);
-  //xTaskCreate(vLEDControlTask_handler, "LED Control Task", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-  //vTaskStartScheduler();
+
+  setTimer(0, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-
+	  if (isTimerExpired(0) == 1){ //clock tick every 10ms, not every 1000ms, clock tick x100 faster than usual
+		  	setTimer(0, 1);
+	  		second++;
+	  		if (second >= 60) {
+	  			second = 0;
+	  			minute++;
+	  			if (minute >= 60) {
+	  				minute = 0;
+	  				hour++;
+	  				if (hour >= 12) {hour = 0;}
+	  			}
+	  		}
+	  		// Update LED clock
+	  		displayTime(hour, minute, second);
+	  	}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -300,129 +313,9 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counterLED1 = 0;
-int counterLED2 = 0;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	if (counterLED1 == 1){ //clock tick every 10ms, not every 1000ms, clock tick x100 faster than usual, set counterLED1 = 100 to return normal speed
-		counterLED1 = 0;
-		second++;
-		if (second >= 60) {
-			second = 0;
-			minute++;
-			if (minute >= 60) {
-				minute = 0;
-				hour++;
-				if (hour >= 12) {hour = 0;}
-			}
-		}
-		// Update LED clock
-		displayTime(hour, minute, second);
-	}
-
-	//Keep counting, baby!
-	counterLED1++;
-
-
-
-
-
-
-
-
-
-	/*if (counterLED1 == 0) {
-		//Up
-		HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Down
-		HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
-		HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Left
-		HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_SET); 			//GREEN - ON
-
-		//Right
-		HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_SET); 			//GREEN - ON
-	}
-	if (counterLED1 == 300) {
-		//Up
-		HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Down
-		HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
-		HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Left
-		HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_SET);	 		//YELLOW - ON
-		HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Right
-		HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_SET);	 		//YELLOW - ON
-		HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-	}
-	if (counterLED1 == 500) {
-			//Up
-			HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_SET); 		//GREEN - ON
-
-			//Down
-			HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
-			HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_SET); 			//GREEN - ON
-
-			//Left
-			HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_SET); 		//RED - ON
-			HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Right
-			HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_SET); 			//RED - ON
-			HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-		}
-	if (counterLED1 == 800) {
-			//Up
-			HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_SET);	 	//YELLOW - ON
-			HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Down
-			HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_SET); 			//YELLOW - ON
-			HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Left
-			HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_SET); 		//RED - ON
-			HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Right
-			HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_SET); 			//RED - ON
-			HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		}
-	if (counterLED1 >= 1000) {
-			//Counter reset
-			counterLED1 = -1;
-		 }
-	// Update 7-SEG LEDs every 10ms because of timer interrupt is configured to tick every 10ms
-	displayNumber(5 - (counterLED1 / 100) % 5);*/
-
-
+	timerRun();
 }
 /* USER CODE END 4 */
 
