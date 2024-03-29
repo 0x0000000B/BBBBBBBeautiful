@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "software_timer.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -63,6 +64,7 @@ TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
 	int hour = 0, minute = 0, second = 0;
+	int number = 5;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -154,14 +156,116 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim1);
-  //xTaskCreate(vLEDControlTask_handler, "LED Control Task", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-  //vTaskStartScheduler();
+
+  setTimer(0, 1);
+  setTimer(9, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if (isTimerExpired(9) == 1){
+		  displayNumber(number);
+		  setTimer(9, 100);
+		  number--;
+		  if (number == 0) number = 5;
+	  }
+	  if (isTimerExpired(0) == 1) {
+	  		//Up
+	  		HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_SET); 			//RED - ON
+	  		HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  		HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  		//Down
+	  		HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_SET); 			//RED - ON
+	  		HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
+	  		HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  		//Left
+	  		HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  		HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  		HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_SET); 			//GREEN - ON
+
+	  		//Right
+	  		HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  		HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  		HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_SET); 			//GREEN - ON
+
+	  		setTimer(1, 300);
+
+
+	  	}
+	  	if (isTimerExpired(1) == 1) {
+	  		//Up
+	  		HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_SET); 			//RED - ON
+	  		HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  		HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  		//Down
+	  		HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_SET); 			//RED - ON
+	  		HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
+	  		HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  		//Left
+	  		HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  		HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_SET);	 		//YELLOW - ON
+	  		HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  		//Right
+	  		HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  		HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_SET);	 		//YELLOW - ON
+	  		HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  		setTimer(2, 200);
+	  	}
+	  	if (isTimerExpired(2) == 1) {
+	  			//Up
+	  			HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  			HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  			HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_SET); 		//GREEN - ON
+
+	  			//Down
+	  			HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  			HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
+	  			HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_SET); 			//GREEN - ON
+
+	  			//Left
+	  			HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_SET); 		//RED - ON
+	  			HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  			HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  			//Right
+	  			HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_SET); 			//RED - ON
+	  			HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  			HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  			setTimer(3, 300);
+	  		}
+	  	if (isTimerExpired(3) == 1) {
+	  			//Up
+	  			HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  			HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_SET);	 	//YELLOW - ON
+	  			HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  			//Down
+	  			HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_RESET); 		//RED - OFF
+	  			HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_SET); 			//YELLOW - ON
+	  			HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  			//Left
+	  			HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_SET); 		//RED - ON
+	  			HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  			HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  			//Right
+	  			HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_SET); 			//RED - ON
+	  			HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
+	  			HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
+
+	  			setTimer(0, 200);
+
+	  		}
 
 
     /* USER CODE END WHILE */
@@ -300,103 +404,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counterLED1 = 0;
-int counterLED2 = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	if (counterLED1 == 0) {
-		//Up
-		HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Down
-		HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
-		HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Left
-		HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_SET); 			//GREEN - ON
-
-		//Right
-		HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_SET); 			//GREEN - ON
-	}
-	if (counterLED1 == 300) {
-		//Up
-		HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-		HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Down
-		HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_SET); 			//RED - ON
-		HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
-		HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Left
-		HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_SET);	 		//YELLOW - ON
-		HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		//Right
-		HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_RESET); 		//RED - OFF
-		HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_SET);	 		//YELLOW - ON
-		HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-	}
-	if (counterLED1 == 500) {
-			//Up
-			HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_SET); 		//GREEN - ON
-
-			//Down
-			HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_RESET); 		//YELLOW - OFF
-			HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_SET); 			//GREEN - ON
-
-			//Left
-			HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_SET); 		//RED - ON
-			HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Right
-			HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_SET); 			//RED - ON
-			HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-		}
-	if (counterLED1 == 800) {
-			//Up
-			HAL_GPIO_WritePin(C1_GPIO_Port, C1_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C12_GPIO_Port, C12_Pin, GPIO_PIN_SET);	 	//YELLOW - ON
-			HAL_GPIO_WritePin(C11_GPIO_Port, C11_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Down
-			HAL_GPIO_WritePin(C7_GPIO_Port, C7_Pin, GPIO_PIN_RESET); 		//RED - OFF
-			HAL_GPIO_WritePin(C6_GPIO_Port, C6_Pin, GPIO_PIN_SET); 			//YELLOW - ON
-			HAL_GPIO_WritePin(C5_GPIO_Port, C5_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Left
-			HAL_GPIO_WritePin(C10_GPIO_Port, C10_Pin, GPIO_PIN_SET); 		//RED - ON
-			HAL_GPIO_WritePin(C9_GPIO_Port, C9_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C8_GPIO_Port, C8_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-			//Right
-			HAL_GPIO_WritePin(C4_GPIO_Port, C4_Pin, GPIO_PIN_SET); 			//RED - ON
-			HAL_GPIO_WritePin(C3_GPIO_Port, C3_Pin, GPIO_PIN_RESET);	 	//YELLOW - OFF
-			HAL_GPIO_WritePin(C2_GPIO_Port, C2_Pin, GPIO_PIN_RESET); 		//GREEN - OFF
-
-		}
-	if (counterLED1 >= 1000) {
-			//Counter reset
-			counterLED1 = -1;
-		 }
-	// Update 7-SEG LEDs every 10ms because of timer interrupt is configured to tick every 10ms
-	displayNumber(5 - (counterLED1 / 100) % 5);
-
-	//Keep counting, baby!
-	counterLED1++;
+	timerRun();
 }
 /* USER CODE END 4 */
 

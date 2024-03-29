@@ -1,0 +1,10 @@
+01:32:12 **** Incremental Build of configuration Debug for project Morathi ****
+make -j16 all 
+arm-none-eabi-size   Morathi.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8060	     96	   1720	   9876	   2694	Morathi.elf
+Finished building: default.size.stdout
+ 
+
+01:32:12 Build Finished. 0 errors, 0 warnings. (took 328ms)
+
