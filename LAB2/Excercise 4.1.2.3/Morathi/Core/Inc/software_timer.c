@@ -1,7 +1,8 @@
 #include "software_timer.h"
+#define MAX_COUNTER 10
 
-int timer_counter[10];
-int timer_flag[10];
+int timer_counter[MAX_COUNTER];
+int timer_flag[MAX_COUNTER];
 
 //Set the counter for software timer
 void setTimer(int index, int value){
@@ -22,10 +23,12 @@ int isTimerExpired(int index){
 //Function to be invoked in Timer_ISR
 void timerRun(){
 	for(int i = 0; i < 10; i++){
+
 		if(timer_counter[i] > 0){
 			timer_counter[i] --;
 			if(timer_counter[i] == 0) timer_flag[i] = 1;
 		}
+
 	}
 }
 
